@@ -1,0 +1,530 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}XY Studio{% endblock %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pte.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/original.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block body %}
+
+
+    {% if app.user %}
+
+        {# side nav #}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="sideNav">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav" style="margin-top: 150px">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#Time">Time Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#TimeSpread">TimeSpread Show</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#TimeReview">Time Review</a>
+                    </li>
+                    {#<li class="nav-item">#}
+                    {#<a class="nav-link js-scroll-trigger" href="#Tutorial">Tutorial Mgmt</a>#}
+                    {#</li>#}
+                    {#<li class="nav-item">#}
+                    {#<a class="nav-link js-scroll-trigger" href="#TutorialSpread">Tutorial Show</a>#}
+                    {#</li>#}
+                    {#<li class="nav-item">#}
+                    {#<a class="nav-link js-scroll-trigger" href="#TutorialReview">Tutorial Review</a>#}
+                    {#</li>#}
+                </ul>
+            </div>
+        </nav>
+        {# end of side nav#}
+
+        {# content #}
+        <div class="container-fluid p-0">
+
+
+            <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="Time">
+                <div class="w-100">
+
+
+
+                    <div class="card col-md-6 col-sm-9" style="margin-top: 50px">
+                        <div class="card-header">
+                            <h3>Time Management</h3>
+                            {#<button id="testGet">testGet</button>#}
+                        </div>
+                        <div class="card-body">
+                            <div class="">
+                                <div id="time-mgmt-result"></div>
+                                <div class="form-group">
+                                    <label for="pte-item">Item</label>
+
+                                    <select class="selectpicker form-control" id="pte-item" data-style="btn-info" required>
+                                        <optgroup label="Listening">
+                                            <option>SST</option>
+                                            <option>WFD</option>
+                                            <option>LCSA</option>
+                                            <option>LCMA</option>
+                                            <option>LFIB</option>
+                                            <option>HCS</option>
+                                            <option>SMW</option>
+                                            <option>HIW</option>
+                                        </optgroup>
+                                        <optgroup label="Speaking">
+                                            <option>RA</option>
+                                            <option>DI</option>
+                                            <option>RS</option>
+                                            <option>RL</option>
+                                            <option>ASQ</option>
+                                        </optgroup>
+                                        <optgroup label="Writing">
+                                            <option>SWT</option>
+                                            <option>Essay</option>
+                                        </optgroup>
+                                        <optgroup label="Reading">
+                                            <option>RCSA</option>
+                                            <option>RCMA</option>
+                                            <option>Re-order</option>
+                                            <option>RFIB</option>
+                                        </optgroup>
+                                        <optgroup label="Other">
+                                            <option>Practice listening</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pte-task">How many tasks you have done? Such as : 5 DI</label>
+                                    <input class="form-control" type="text" id="pte-task" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pte-finish-date">Which day you do these work?</label>
+                                    <input class="form-control" type="date" id="pte-finish-date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pte-finish-time">How many time you have spent? It calculates by
+                                        minutes</label>
+                                    <input class="form-control" type="number" id="pte-finish-time" required>
+                                </div>
+                                <button id="pte-time-mgmt" class="btn btn-primary btn-block">Commit</button>
+                                </td>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+
+            <hr class="m-0">
+
+            <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="TimeSpread">
+                <div class="w-100">
+                    <div class="container mb-3 mt-3">
+                        <table class="table table-striped order-table table-hover" id="mydatatable">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Item</th>
+                                <th>Task</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Type</th>
+                            </tr>
+                            </thead>
+                            <tbody id="time-mgmt-review">
+                            {% for pte in ptes %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ pte.item }}</td>
+                                    <td>{{ pte.task }}</td>
+                                    <td>{{ pte.finishdate | date("Y-m-d") }}</td>
+                                    <td>{{ pte.spendingtime }}</td>
+                                    <td>{{ pte.itemtype }}</td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>Item</th>
+                                <th>Task</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Type</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+            <hr class="m-0">
+
+            <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="TimeReview">
+                <div class="w-100">
+                    <div class="card" style="margin-top: 50px">
+                        <div class="card-body">
+                            <canvas id="show-time-mgmt" ></canvas>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-block btn-primary" id="collect-time-mgmt">Show Spending Time Distribution</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="m-0">
+
+            {#<section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="Tutorial">#}
+            {#<div class="w-100">#}
+            {#<div class="card" style="margin-top: 50px">#}
+            {#<div class="card-header">#}
+            {#<h3>Tutorial Mgmt</h3>#}
+            {#</div>#}
+            {#<div class="card-body">#}
+            {#<form action="" method="post">#}
+            {#<div class="col-md-5 col-sm-9">#}
+            {#<div id="tutorial-mgmt-result"></div>#}
+            {#<div class="form-group">#}
+            {#<label for="pte-tutorial-date">Which day you attend the tutorial?</label>#}
+            {#<input class="form-control" type="date" id="pte-tutorial-date" required>#}
+            {#</div>#}
+            {#<div class="form-group">#}
+            {#<label for="pte-tutorial-time">How many time you have spent? It calculates by#}
+            {#minutes</label>#}
+            {#<input class="form-control" type="number" id="pte-tutorial-time" required>#}
+            {#</div>#}
+            {#<button id="pte-tutorial-mgmt" class="btn btn-primary btn-block">Commit</button>#}
+            {#</td>#}
+            {#</div>#}
+            {#</form>#}
+
+            {#</div>#}
+            {#</div>#}
+
+            {#</div>#}
+
+            {#</section>#}
+
+            {#<hr class="m-0">#}
+
+            {#<section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="TutorialSpread">#}
+            {#<div class="w-100">#}
+            {#<div class="container mb-3 mt-3">#}
+            {#{% set total = 0 %}#}
+            {#{% for tutorial in tutorials %}#}
+            {#{% set total = total +  tutorial.spendingtime %}#}
+            {#{% endfor %}#}
+            {#{% set total = total/60 %}#}
+            {#<h5>The total hours: <span style="color: royalblue"> {{ total | number_format(2) }}</span></h5>#}
+            {#</div>#}
+
+            {#<div class="container mb-3 mt-3">#}
+            {#<table class="table table-striped order-table table-hover" id="tutorialdatatable">#}
+            {#<thead>#}
+            {#<tr>#}
+            {#<th>#</th>#}
+            {#<th>Date</th>#}
+            {#<th>Time</th>#}
+            {#</tr>#}
+            {#</thead>#}
+            {#<tbody id="time-mgmt-review">#}
+            {#{% for tutorial in tutorials %}#}
+            {#<tr>#}
+            {#<td>{{ loop.index }}</td>#}
+            {#<td>{{ tutorial.attenddate | date("Y-m-d") }}</td>#}
+            {#<td>{{ tutorial.spendingtime }}</td>#}
+            {#</tr>#}
+            {#{% endfor %}#}
+
+            {#</tbody>#}
+            {#<tfoot>#}
+            {#<tr>#}
+            {#<th>#</th>#}
+            {#<th>Date</th>#}
+            {#<th>Time</th>#}
+            {#</tr>#}
+            {#</tfoot>#}
+            {#</table>#}
+            {#</div>#}
+
+            {#</div>#}
+            {#</section>#}
+
+            {#<hr class="m-0">#}
+
+            {#<section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="TutorialReview">#}
+            {#<div class="w-100">#}
+            {#<div class="card" style="margin-top: 50px">#}
+            {#<div class="card-body">#}
+            {#<canvas id="show-tutorial-mgmt" ></canvas>#}
+            {#</div>#}
+            {#<div class="card-footer">#}
+            {#<button class="btn btn-block btn-primary" id="collect-tutorial-mgmt">Show Tutorial Distribution</button>#}
+            {#</div>#}
+            {#</div>#}
+            {#</div>#}
+            {#</section>#}
+
+            {#<hr class="m-0">#}
+
+        </div>
+        {# end of content#}
+
+    {% endif %}
+
+    
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src = "{{ asset('js/table.js') }}"></script>
+    <script src="{{ asset('js/jquery.easing.js') }}"></script>
+    <script src="{{ asset('js/pte.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+
+    <script >
+
+    $('#mydatatable').DataTable();
+    $('#tutorialdatatable').DataTable();
+
+
+    document.getElementById('collect-time-mgmt').addEventListener(
+                'click', pteCollectTimeMgmt
+    );
+    function pteCollectTimeMgmt() {
+
+        fetch('https://www.xystudio.space/account/pte/get/time')
+        .then((res)=>res.json())
+        .then((data)=>{
+            console.log('outside',data);
+
+            let Listening = data[0].Listening[0]['spendingtime'];
+            let Reading = data[1].Reading[0]['spendingtime'];
+            let Speaking = data[2].Speaking[0]['spendingtime'];
+            let Writing = data[3].Writing[0]['spendingtime'];
+            let Other = data[4].Other[0]['spendingtime'];
+            let Total = data[5].Total[0]['spendingtime'];
+
+
+            var ctx = document.getElementById('show-time-mgmt');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Speaking', 'Listening', 'Reading', 'Writing', 'Others'],
+                    datasets: [{
+                        label: 'PTE Learning Total Minutes : '+Total,
+                        data: [Listening, Reading, Speaking, Writing, Other],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+        })
+    }
+
+
+
+
+    document.getElementById('pte-time-mgmt').addEventListener(
+            'click', pteMgmt
+    );
+    document.getElementById('pte-tutorial-mgmt').addEventListener(
+        'click', pteTutMgmt
+    );
+    document.getElementById('testGet').addEventListener(
+        'click', testGet
+    );
+
+
+    function testGet() {
+
+        fetch('https://www.xystudio.space/pte/get')
+        .then((res)=>res.json())
+        .then((data)=>{
+            console.log('outside',data);
+
+        })
+
+    }
+
+    function pteMgmt(e) {
+        e.preventDefault();
+        let item = document.getElementById('pte-item').value;
+        let task = document.getElementById('pte-task').value;
+        let date = document.getElementById('pte-finish-date').value;
+        let time = document.getElementById('pte-finish-time').value;
+        let submittype = 'time_mgmt';
+
+        console.log('item :', item);
+        console.log('task :', task);
+        console.log('date :', date);
+        console.log('time :', time);
+
+        fetch('https://www.xystudio.space/account/pte',{
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({item:item,task:task,date:date,time:time,submittype:submittype})
+        })
+        .then((res)=>res.json())
+        .then((data)=>{
+
+            console.log('outside',data);
+
+            if (data.status==='ok'){
+                document.getElementById('pte-item').value = '';
+                document.getElementById('pte-task').value = '';
+                document.getElementById('pte-finish-date').value = '';
+                document.getElementById('pte-finish-time').value = '';
+                let output = '';
+                output += `
+                        <div class="alert alert-danger">
+                              Congratulations, submit successful.
+                        </div>
+                        `;
+                document.getElementById('time-mgmt-result').innerHTML = output;
+
+
+                // handle insert new row
+                let mgmtContent = document.getElementById('time-mgmt-review');
+
+                let tr = document.createElement("tr");
+                let td1 = document.createElement("td");
+                let td2 = document.createElement("td");
+                let td3 = document.createElement("td");
+                let td4 = document.createElement("td");
+                let td5 = document.createElement("td");
+
+                td1.innerText = '';
+                td2.innerText = item;
+                td3.innerText = task;
+                td4.innerText = date;
+                td5.innerText = time;
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+
+                mgmtContent.insertBefore(tr, mgmtContent.childNodes[0]);
+
+
+                let table = document.getElementById('time-mgmt-review');
+                let rows = table.rows;
+                for(let i = 0; i < rows.length; i++) {
+                  let row = rows[i];
+                  row.cells[0].innerHTML = i+1;
+                }
+
+
+            }else {
+                let output = '';
+                output += `
+                        <div class="alert alert-danger">
+                              Sorry, submit fail. As `;
+                output += data.status;
+                output += `</div>`;
+                document.getElementById('time-mgmt-result').innerHTML = output;
+            }
+
+        })
+
+    }
+
+
+    function pteTutMgmt(e) {
+        e.preventDefault();
+        let date = document.getElementById('pte-tutorial-date').value;
+        let time = document.getElementById('pte-tutorial-time').value;
+        let submittype = 'tutorial_mgmt';
+
+        console.log('date :', date);
+        console.log('time :', time);
+
+        fetch('https://www.xystudio.space/account/pte',{
+        // fetch('http://127.0.0.1:8000/account/pte',{
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({date:date,time:time,submittype:submittype})
+        })
+        .then((res)=>res.json())
+        .then((data)=>{
+
+            console.log(data.status);
+
+            if (data.status==='ok'){
+                document.getElementById('pte-tutorial-date').value = '';
+                document.getElementById('pte-tutorial-time').value = '';
+                let output = '';
+                output += `
+                        <div class="alert alert-danger">
+                              Congratulations, submit successful.
+                        </div>
+                        `;
+                document.getElementById('tutorial-mgmt-result').innerHTML = output;
+            }else {
+                let output = '';
+                output += `
+                        <div class="alert alert-danger">
+                              Sorry, submit fail. As `;
+                output += data.status;
+                output += `</div>`;
+                document.getElementById('tutorial-mgmt-result').innerHTML = output;
+            }
+
+        })
+
+    }
+
+
+    document.getElementById('pte-finish-time').addEventListener('change', function (e) {
+        if(this.value < 0){
+          document.getElementById('pte-finish-time').value = '';
+        }
+    });
+
+     document.getElementById('pte-tutorial-time').addEventListener('change', function (e) {
+        if(this.value < 0){
+          document.getElementById('pte-tutorial-time').value = '';
+        }
+    });
+
+    </script>
+{% endblock %}
